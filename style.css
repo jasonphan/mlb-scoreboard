@@ -24,3 +24,17 @@ td {
 #homeAwayName {
 	text-align: center;
 }
+
+.teamCode {
+	width: 50px;
+	text-align: left;
+}
+
+.player {
+	width: 100px; 
+	text-align: left;
+}
+
+.finalScore {
+	float: right;
+}

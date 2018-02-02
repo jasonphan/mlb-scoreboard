@@ -157,49 +157,57 @@ function getDetailedData(index) {
 // Displays detailed data into the detail view.
 function displayDetailData() {
 	let inningScore = detailPayload.linescore.inning_line_score;
+	let numInning = inningScore.length;
+	let strHome = "";
+ 	let strAway = "";
 
 	$("#detailView").empty();
 
-	// Display line scores for both home and away team.
-	$("#detailView").append("<table><tr><th style='width:50px'></th><th>1</th><th>2</th>" +
-    						"<th>3</th><th>4</th><th>5</th><th>6</th>" +
-    						"<th>7</th><th>8</th><th>9</th><th>R</th>" +
-    						"<th>H</th><th>E</th></tr>" +
+	// Header for runs per inning.
+ 	$("#detailView").append("<table>" +
+ 							"<tr>" +
+ 							"<th class='teamCode'></th><th>1</th><th>2</th>" +
+ 							"<th>3</th><th>4</th><th>5</th><th>6</th><th>7</th>" + 
+ 							"<th>8</th><th>9</th><th>R</th><th>H</th><th>E</th>" +
+ 							"</tr></table>");
 
-    						"<tr><td style='width:50px; text-align:left'>" + detailPayload.home_team_code.toUpperCase() + "</td>" +
-    						"<td>" + inningScore[0].home + "</td><td>" + inningScore[1].home + "</td>" +
-    						"<td>" + inningScore[2].home + "</td><td>" + inningScore[3].home + "</td>" +
-    						"<td>" + inningScore[4].home + "</td><td>" + inningScore[5].home + "</td>" +
-    						"<td>" + inningScore[6].home + "</td><td>" + inningScore[7].home + "</td>" +
-    						"<td>" + inningScore[8].home + "</td>" +
-    						"<td style='width:15px'>" + detailPayload.linescore.home_team_runs + "</td>" +
-    						"<td style='width:15px'>" + detailPayload.linescore.home_team_hits + "</td>" +
-    						"<td style='width:15px'>" + detailPayload.linescore.home_team_errors + "</td></tr>" +
+ 	// Data for the runs of home team.
+ 	strHome += "<tr><td class='teamCode'>" + detailPayload.home_team_code.toUpperCase() + "</td>";
+ 	for (let i = 0; i < numInning; i++) {
+	 	strHome += "<td>" + inningScore[i].home + "</td>"; 
+	}
+	strHome += "<td>" + detailPayload.linescore.home_team_runs + "</td>" +
+     			"<td>" + detailPayload.linescore.home_team_hits + "</td>" +
+     			"<td>" + detailPayload.linescore.home_team_errors + "</td>";
+	strHome += "</tr>";
 
-    						"<tr><td style='width:50px; text-align:left'>" + detailPayload.away_team_code.toUpperCase() + "</td>" +
-    						"<td>" + inningScore[0].away + "</td><td>" + inningScore[1].away + "</td>" +
-    						"<td>" + inningScore[2].away + "</td><td>" + inningScore[3].away + "</td>" +
-    						"<td>" + inningScore[4].away + "</td><td>" + inningScore[5].away + "</td>" + 
-    						"<td>" + inningScore[6].away + "</td><td>" + inningScore[7].away + "</td>" +
-    						"<td>" + inningScore[8].away + "</td>" + 
-    						"<td>" + detailPayload.linescore.away_team_runs + "</td>" +
-    						"<td>" + detailPayload.linescore.away_team_hits + "</td>" + 
-    						"<td>" + detailPayload.linescore.away_team_errors + "</td></tr>" +
-    						"</table><br>");
+	// Data for the runs of away team.
+	strAway += "<tr><td class='teamCode'>" + detailPayload.away_team_code.toUpperCase() + "</td>";
+	for (let i = 0; i < numInning; i++) {
+		strAway += "<td>" + inningScore[i].away + "</td>";
+	}
+	strAway += "<td>" + detailPayload.linescore.away_team_runs + "</td>" +
+      			"<td>" + detailPayload.linescore.away_team_hits + "</td>" + 
+      			"<td>" + detailPayload.linescore.away_team_errors + "</td></tr>";
+    strAway += "</tr>";
+
+    // Display the runs for each inning for each team.
+	$("#detailView table").append(strHome + strAway);
+	$("#detailView").append("<br>");
 
 	// Header for detail home team view.
 	$("#detailView").append("<div id='detailHome'>" +
 							"<label><strong>" + detailPayload.home_fname + "</strong>" +
 							" | " + detailPayload.away_fname + "</label>" +
 							"<br><br><table>" +
-							"<tr><th style='width:100px; text-align:left'>Name</th><th>AB</th>" +
+							"<tr><th class='player'>Name</th><th>AB</th>" +
 							"<th>R</th><th>H</th><th>RBI</th><th>BB</th>" +
 							"<th>SO</th><th>AVG</th></tr></table></div>");
 
 	// Display home team batter stats.
 	for (let i = 0; i < detailPayload.batting[0].batter.length; i++) {
 		$("#detailHome table").append("<tr>" +
-								"<td style='width:100px; text-align:left'>" + detailPayload.batting[0].batter[i].name + "</td>" +
+								"<td class='player'>" + detailPayload.batting[0].batter[i].name + "</td>" +
 								"<td>" + detailPayload.batting[0].batter[i].ab + "</td>" +
 								"<td>" + detailPayload.batting[0].batter[i].r + "</td>" +
 								"<td>" + detailPayload.batting[0].batter[i].h + "</td>" +
@@ -219,14 +227,14 @@ function displayDetailData() {
 							"<label>" + detailPayload.home_fname +
 							" | " + "<strong>" + detailPayload.away_fname + "</strong></label>" +
 							"<br><br><table>" +
-							"<tr><th style='width:100px; text-align:left'>Name</th><th>AB</th>" +
+							"<tr><th class='player'>Name</th><th>AB</th>" +
 							"<th>R</th><th>H</th><th>RBI</th><th>BB</th>" +
 							"<th>SO</th><th>AVG</th></tr></table></div>");
 
 	// Display away team batter stats.
 	for (let i = 0; i < detailPayload.batting[1].batter.length; i++) {
 		$("#detailAway table").append("<tr>" +
-								"<td style='width:100px; text-align:left'>" + detailPayload.batting[1].batter[i].name + "</td>" +
+								"<td class='player'>" + detailPayload.batting[1].batter[i].name + "</td>" +
 								"<td>" + detailPayload.batting[1].batter[i].ab + "</td>" +
 								"<td>" + detailPayload.batting[1].batter[i].r + "</td>" +
 								"<td>" + detailPayload.batting[1].batter[i].h + "</td>" +
@@ -293,16 +301,16 @@ function displayData() {
 				// Display the winning team and their score in bold.
 				if (homeWin) {
 					$("#listView").append("<div class='games' id='game_0'><p><strong>" + 
-										homeName + "<span style='float:right'>" + 
+										homeName + "<span class='finalScore'>" + 
 										homeScore + "</span></strong>" + "<br>" +
-										awayName + "<span style='float:right'>" +
+										awayName + "<span class='finalScore'>" +
 										awayScore + "</span>" + "<br>" + status +
 										"</p>");
 				} else {
 					$("#listView").append("<div class='games' id='game_0'><p>" + 
-										homeName + "<span style='float:right'>" +
+										homeName + "<span class='finalScore'>" +
 										homeScore + "</span>" + "<br><strong>" +
-										awayName + "<span style='float:right'>" +
+										awayName + "<span class='finalScore'>" +
 										awayScore + "</span></strong>" + "<br>" +
 										status + "</p>");
 				}
@@ -357,15 +365,15 @@ function displayData() {
 					if (homeWin) {
 						$("#listView").append("<div class='games' id='game_" +
 											i + "'><p><strong>" + homeName + 
-											"<span style='float:right'>" + homeScore +
+											"<span class='finalScore'>" + homeScore +
 											"</span></strong>" + "<br>" + awayName +
-											"<span style='float:right'>" + awayScore +
+											"<span class='finalScore'>" + awayScore +
 											"</span>" + "<br>" + status + "</p></div>");
 					} else {
 						$("#listView").append("<div class='games' id='game_" + i + 
-											"'><p>" + homeName + "<span style='float:right'>" +
+											"'><p>" + homeName + "<span class='finalScore'>" +
 											homeScore + "</span>" + "<br><strong>" + 
-											awayName + "<span style='float:right'>" + 
+											awayName + "<span class='finalScore'>" + 
 											awayScore + "</span></strong>" +
 											"<br>" + status + "</p></div>");
 					}
