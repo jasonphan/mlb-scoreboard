@@ -189,7 +189,7 @@ function displayDetailData() {
 	strAway += "<td>" + detailPayload.linescore.away_team_runs + "</td>" +
       			"<td>" + detailPayload.linescore.away_team_hits + "</td>" + 
       			"<td>" + detailPayload.linescore.away_team_errors + "</td></tr>";
-    strAway += "</tr>";
+	strAway += "</tr>";
 
     // Display the runs for each inning for each team.
 	$("#detailView table").append(strHome + strAway);
