@@ -3,33 +3,152 @@
 
 	<head>
 		<title>MLB Scoreboard</title>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" /></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 		<script type="text/javascript" src="script.js"></script>
 		<link type="text/css" rel="stylesheet" href="style.css" />
 	</head>
 
+	<body ng-app="mlbScoreboard">
 
-	<body>
-		<div id="options">
-			<br>
-			<button type="button" id="prev">&lt</button>
+		<div ng-controller="mainCtrl">
+			<div id="input">
+				<input type="date" id="inputDate" name="inputDate" ng-model="date" value="{{ date | date:'yyyy-MM-dd'}}" ng-change="dateChange()" required/>
+			</div>
 
-			<select id="month"></select>
-			<select id="day"></select>
-			<select id="year"></select>
+			<hr>
 
-			<button type="button" id="next">&gt</button>
-			<br><br>
+			<h1 ng-show="noGames">No games today!</h1>
 
-			<label id="favTeam">Favourite Team</label>
-			<select id="team"></select>
-			<button type="button" id="back">Back</button>
+			<div id="listView" ng-show="!isDetailView">
+				<div class="listViewGame" ng-repeat="game in data.data.games.game">
+					<table>
+						<tr>
+							<td ng-if="isHomeWin(game.linescore.r.home, game.linescore.r.away)">{{game.home_team_name | uppercase}}</td>
+							<td ng-if="isHomeWin(game.linescore.r.home, game.linescore.r.away)">{{game.linescore.r.home | uppercase}}</td>
 
-			<br><br>
+							<td ng-if="!isHomeWin(game.linescore.r.home, game.linescore.r.away)">{{game.home_team_name}}</td>
+							<td ng-if="!isHomeWin(game.linescore.r.home, game.linescore.r.away)">{{game.linescore.r.home}}</td>
+						</tr>
+						<tr>
+							<td ng-if="!isHomeWin(game.linescore.r.home, game.linescore.r.away)">{{game.away_team_name | uppercase}}</td>
+							<td ng-if="!isHomeWin(game.linescore.r.home, game.linescore.r.away)">{{game.linescore.r.away | uppercase}}</td>
+
+							<td ng-if="isHomeWin(game.linescore.r.home, game.linescore.r.away)">{{game.away_team_name}}</td>
+							<td ng-if="isHomeWin(game.linescore.r.home, game.linescore.r.away)">{{game.linescore.r.away}}</td>
+						</tr>
+						<tr>
+							<td>{{game.status.status}}</td>
+						</tr>
+					</table>
+
+					<button id="btnView" type="button" ng-click="getDetailedView(game)" ng-hide="isPreview(game.status.status)">View</button>
+					<br ng-hide="isPreview(game.status.status)"><br ng-hide="isPreview(game.status.status)">
+				</div>
+			</div>
+
+			<div id="detailView" ng-show="isDetailView">
+				<div id="linescore">
+					<table>
+						<thead>
+							<tr>
+								<th></th>
+								<th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
+								<th>R</th><th>H</th><th>E</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr>
+								<td>{{detailedData.data.boxscore.home_team_code | uppercase }}</td>
+								<td ng-repeat="inning in detailedData.data.boxscore.linescore.inning_line_score">{{inning.home}}</td>
+								<td>{{detailedData.data.boxscore.linescore.home_team_runs}}</td>
+								<td>{{detailedData.data.boxscore.linescore.home_team_hits}}</td>
+								<td>{{detailedData.data.boxscore.linescore.home_team_errors}}</td>
+							</tr>
+
+							<tr>
+								<td>{{detailedData.data.boxscore.away_team_code | uppercase }}</td>
+								<td ng-repeat="inning in detailedData.data.boxscore.linescore.inning_line_score">{{inning.away}}</td>
+								<td>{{detailedData.data.boxscore.linescore.away_team_runs}}</td>
+								<td>{{detailedData.data.boxscore.linescore.away_team_hits}}</td>
+								<td>{{detailedData.data.boxscore.linescore.away_team_errors}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div id="battingHome" ng-show="isHomeView">
+					<p>{{detailedData.data.boxscore.home_sname | uppercase }} | {{ detailedData.data.boxscore.away_sname }}</p>
+					<table>
+						<thead>
+							<tr>
+								<th class="batterName">Name</th>
+								<th>AB</th>
+								<th>R</th>
+								<th>H</th>
+								<th>RBI</th>
+								<th>BB</th>
+								<th>SO</th>
+								<th>AVG</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="batter in detailedData.data.boxscore.batting[0].batter">
+								<td class="batterName">{{batter.name}}</td>
+								<td>{{batter.ab}}</td>
+								<td>{{batter.r}}</td>
+								<td>{{batter.h}}</td>
+								<td>{{batter.rbi}}</td>
+								<td>{{batter.bb}}</td>
+								<td>{{batter.so}}</td>
+								<td>{{batter.avg}}</td>
+							</tr>
+						</tbody>
+					</table>
+					<br>
+					<button type="button" ng-click="toggleTeam()">Toggle Team</button>
+					<button type="button" ng-click="back()">Back</button>
+				</div>
+
+
+				<div id="battingAway" ng-show="!isHomeView">
+					<p>{{detailedData.data.boxscore.home_sname }} | {{ detailedData.data.boxscore.away_sname | uppercase }}</p>
+					<table>
+						<thead>
+							<tr>
+								<th class="batterName">Name</th>
+								<th>AB</th>
+								<th>R</th>
+								<th>H</th>
+								<th>RBI</th>
+								<th>BB</th>
+								<th>SO</th>
+								<th>AVG</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="batter in detailedData.data.boxscore.batting[1].batter">
+								<td class="batterName">{{batter.name}}</td>
+								<td>{{batter.ab}}</td>
+								<td>{{batter.r}}</td>
+								<td>{{batter.h}}</td>
+								<td>{{batter.rbi}}</td>
+								<td>{{batter.bb}}</td>
+								<td>{{batter.so}}</td>
+								<td>{{batter.avg}}</td>
+							</tr>
+						</tbody>
+					</table>
+					<br>
+					<button type="button" ng-click="toggleTeam()">Toggle Team</button>
+					<button type="button" ng-click="back()">Back</button>
+				</div>
+
+			</div>
 		</div>
-		
-		<div id="listView"></div>
-		<div id="detailView"></div>
+
 	</body>
 
 </html>
