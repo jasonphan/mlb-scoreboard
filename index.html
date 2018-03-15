@@ -23,18 +23,18 @@
 				<div class="listViewGame" ng-repeat="game in data.data.games.game">
 					<table>
 						<tr>
-							<td ng-if="isHomeWin(game.linescore.r.home, game.linescore.r.away)">{{game.home_team_name | uppercase}}</td>
-							<td ng-if="isHomeWin(game.linescore.r.home, game.linescore.r.away)">{{game.linescore.r.home | uppercase}}</td>
+							<td ng-if="isHomeWin(game.linescore.r.home, game.linescore.r.away) || game.linescore.r.away == game.linescore.r.home">{{game.home_team_name | uppercase}}</td>
+							<td ng-if="isHomeWin(game.linescore.r.home, game.linescore.r.away) || game.linescore.r.away == game.linescore.r.home">{{game.linescore.r.home | uppercase}}</td>
 
-							<td ng-if="!isHomeWin(game.linescore.r.home, game.linescore.r.away)">{{game.home_team_name}}</td>
-							<td ng-if="!isHomeWin(game.linescore.r.home, game.linescore.r.away)">{{game.linescore.r.home}}</td>
+							<td ng-if="!isHomeWin(game.linescore.r.home, game.linescore.r.away) && game.linescore.r.away != game.linescore.r.home">{{game.home_team_name}}</td>
+							<td ng-if="!isHomeWin(game.linescore.r.home, game.linescore.r.away) && game.linescore.r.away != game.linescore.r.home">{{game.linescore.r.home}}</td>
 						</tr>
 						<tr>
-							<td ng-if="!isHomeWin(game.linescore.r.home, game.linescore.r.away)">{{game.away_team_name | uppercase}}</td>
-							<td ng-if="!isHomeWin(game.linescore.r.home, game.linescore.r.away)">{{game.linescore.r.away | uppercase}}</td>
+							<td ng-if="!isHomeWin(game.linescore.r.home, game.linescore.r.away) || game.linescore.r.away == game.linescore.r.home">{{game.away_team_name | uppercase}}</td>
+							<td ng-if="!isHomeWin(game.linescore.r.home, game.linescore.r.away) || game.linescore.r.away == game.linescore.r.home">{{game.linescore.r.away | uppercase}}</td>
 
-							<td ng-if="isHomeWin(game.linescore.r.home, game.linescore.r.away)">{{game.away_team_name}}</td>
-							<td ng-if="isHomeWin(game.linescore.r.home, game.linescore.r.away)">{{game.linescore.r.away}}</td>
+							<td ng-if="isHomeWin(game.linescore.r.home, game.linescore.r.away) && game.linescore.r.away != game.linescore.r.home">{{game.away_team_name}}</td>
+							<td ng-if="isHomeWin(game.linescore.r.home, game.linescore.r.away) && game.linescore.r.away != game.linescore.r.home">{{game.linescore.r.away}}</td>
 						</tr>
 						<tr>
 							<td>{{game.status.status}}</td>
