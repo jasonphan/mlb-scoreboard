@@ -1,0 +1,33 @@
+div {
+	width: 300px;
+}
+
+.listViewGame {
+	border-bottom: 0.1px solid black;
+}
+
+#battingHome tr, #battingAway tr, h1, .teamHeadings {
+	text-align: center;
+}
+
+#btnView {
+	float: right;
+	width: 30%;
+}
+
+.score {
+	float: right;
+}
+
+.center {
+	margin: auto;
+	width: 50%;
+}
+
+.batterName {
+	text-align: left;
+}
+
+.teamCode {
+	width: 50px;
+}
