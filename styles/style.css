@@ -31,3 +31,7 @@ div {
 .teamCode {
 	width: 50px;
 }
+
+select {
+	width: 145px;
+}

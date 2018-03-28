@@ -7,6 +7,24 @@ listViewCtrl.$inject = ['$scope', '$http', 'viewFactory'];
 
 function listViewCtrl($scope, $http, viewFactory) {
 
+	// The favourite team games are listed at the top.
+	$scope.teamChange = function(team) {
+		let ind;
+		
+		if ($scope.data.data.games.game !== undefined) {
+			$scope.data.data.games.game.forEach(function(game, index) {
+				if (game.home_team_name === $scope.favTeam || game.away_team_name === $scope.favTeam) {
+					ind = index;
+				}
+			});
+		}
+
+		if (ind !== undefined) {
+			let tmpGame = $scope.data.data.games.game.splice(ind, 1)[0];
+			$scope.data.data.games.game.unshift(tmpGame);
+		}
+	};
+
 	// Get list view information when the date changes.
 	$scope.dateChange = function() {
 		let day, month, year;
@@ -35,6 +53,8 @@ function listViewCtrl($scope, $http, viewFactory) {
 				$scope.noGames = false;
 			}
 
+			$scope.teamChange($scope.favTeam);
+
 		}, function errorCallback(response) {
 			$scope.error = response.statusText;
 		});
@@ -57,10 +77,20 @@ function listViewCtrl($scope, $http, viewFactory) {
 	// Hides view button if the list game has status preview.
 	$scope.isPreview = function(status) {
 		return (status === "Preview") ? true : false;
-	}
+	};
+
 
 	$scope.date = new Date();
 	$scope.dateChange();
+	$scope.teamNames = ["Angels", "Astros", "Athletics", "Blue Jays", 
+					"Braves", "Brewers", "Cardinals", "Cubs", 
+					"D-backs", "Dodgers", "Giants", "Indians", 
+					"Mariners", "Marlins", "Mets", "Nationals", 
+					"Orioles", "Padres", "Phillies", "Pirates", 
+					"Rangers", "Rays", "Red Sox", "Reds", "Rockies", 
+					"Royals", "Tigers", "Twins", "White Sox", "Yankees"];
+	$scope.favTeam = $scope.teamNames[3];
+
 
 	$scope.$watch(function() { return viewFactory.isDetailView(); }, function(newValue, oldValue) {
 		if (newValue !== oldValue) {

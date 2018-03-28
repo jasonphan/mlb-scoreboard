@@ -16,6 +16,9 @@
 		<div ng-controller="listViewCtrl">
 			<div id="input" ng-show="!isDetailView" class="center">
 				<input type="date" id="inputDate" name="inputDate" ng-model="date" value="{{ date | date:'yyyy-MM-dd'}}" ng-change="dateChange()" required/>
+				<br><br>
+				<select ng-model="favTeam" ng-options="team for team in teamNames" ng-change="teamChange(team)">
+				</select>
 			</div>
 
 			<hr>
