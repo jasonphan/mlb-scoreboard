@@ -76,7 +76,7 @@ function listViewCtrl($scope, $http, viewFactory) {
 
 	// Hides view button if the list game has status preview.
 	$scope.isPreview = function(status) {
-		return (status === "Preview") ? true : false;
+		return (status === "Preview" || status === "Postponed") ? true : false;
 	};
 
 

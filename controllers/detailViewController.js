@@ -27,15 +27,30 @@ function detailViewCtrl($scope, $http, viewFactory) {
 
 		}).then(function successCallback(response) {
 			$scope.detailedData = response.data;
+			$scope.isHomeView = true;
+			$scope.runsHeadings = $scope.generateHeadings();
+
 		}, function errorCallback(response) {
 			$scope.error = response.statusText;
 		});
 
 	};
 
-	$scope.runsHeadings = ['', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'R', 'H', 'E'];
+
+	// Generate the headings for runs.
+	$scope.generateHeadings = function() {
+		let lineScore = $scope.detailedData.data.boxscore.linescore.inning_line_score;
+		let runsHeadings = [''];
+
+		lineScore.forEach(function(elt, ind) {
+			runsHeadings.push((ind + 1).toString());
+		});
+
+		return runsHeadings.concat(['R', 'H', 'E']);
+	};
+
+
 	$scope.batterHeadings = ['Name', 'AB', 'R', 'H', 'RBI', 'BB', 'SO', 'AVG'];
-	$scope.isHomeView = true;
 
 	$scope.$watch(function() { return viewFactory.isDetailView(); }, function(newValue, oldValue) {
 		if (newValue !== oldValue) {

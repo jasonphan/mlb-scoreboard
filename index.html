@@ -52,7 +52,7 @@
 							</tr>
 						</thead>
 
-						<tbody>
+						<tbody id="runs">
 							<tr>
 								<td class="teamCode">{{detailedData.data.boxscore.home_team_code | uppercase }}</td>
 								<td ng-repeat="inning in detailedData.data.boxscore.linescore.inning_line_score">{{inning.home}}</td>
@@ -121,8 +121,9 @@
 				</div>
 
 				<br>
-				<button type="button" ng-click="toggleTeam()">Toggle Team</button>
+				<button type="button" ng-click="toggleTeam()" id="btnToggle">Toggle Team</button>
 				<button type="button" ng-click="back()">Back</button>
+				<br>
 				<hr>
 
 			</div>

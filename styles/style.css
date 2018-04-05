@@ -6,7 +6,7 @@ div {
 	border-bottom: 0.1px solid black;
 }
 
-#battingHome tr, #battingAway tr, h1, .teamHeadings {
+#battingHome tr, #battingAway tr, h1, .teamHeadings, #runs {
 	text-align: center;
 }
 
@@ -15,11 +15,15 @@ div {
 	width: 30%;
 }
 
+#btnToggle {
+	margin-left: 20px;
+}
+
 .score {
 	float: right;
 }
 
-.center {
+.center, table {
 	margin: auto;
 	width: 50%;
 }
