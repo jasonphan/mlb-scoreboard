@@ -1,6 +1,6 @@
 angular
 	.module('mlbApp')
-	.service('viewFactory', viewFactory);
+	.factory('viewFactory', viewFactory);
 
 function viewFactory() {
 
